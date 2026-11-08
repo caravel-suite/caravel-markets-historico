@@ -17,6 +17,14 @@ calc = hashlib.sha256(json.dumps(linha["dados_hash"], sort_keys=True).encode()).
 assert calc == linha["hash"]
 ```
 
+Desde 08/11/2026 (versão «riscos») cada previsão oficial leva também, DENTRO do hash: `modelos` (variação prevista
+por cada modelo e pelas referências «ingenuo» e «media-movel»), `pesos`, `escala` (volatilidade recente × √passos),
+`intervalo` (preço baixo/alto com cobertura alvo de 80 % e 95 %, conformal), `calibracao`, `limiar` (de cada
+horizonte), `vela` (`h` = velas horárias, `d` = diárias), `fontes` (fontes de preço usadas) e, quando é o caso,
+`abstencao` (motivo para NÃO dar número: «Sem previsão — incerteza demasiado alta») e `eventos` (BCE, Fed, IPC
+na janela da previsão). Há horizontes de 1 h a 1 ano (`horizonte_h`). Estas linhas ficam em ficheiros diários
+`historico/AAAA-MM-DD.jsonl` (o volume não cabe num ficheiro por mês); as anteriores continuam nos mensais.
+
 Desde 07/11/2026 (~23 h UTC) há também `mercado` (`cripto` ou `bolsa`) e `oficial` (true = previsão do robô
 mostrada no site, feita pela Caravel AI; false = previsão de um modelo isolado, usada na classificação dos modelos).
 Na bolsa, `horizonte_h` = 1 quer dizer **1 sessão** (`dados_hash.unidade` = «sessao», `dados_hash.ref_data` = data da
